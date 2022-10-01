@@ -1,13 +1,13 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const NODE_ENV = process.env.NODE_ENV;
+// const NODE_ENV = process.env.NODE_ENV;
 
 module.exports = {
   entry: {
     main: path.resolve(__dirname, './client/index.js'),
   },
-  mode: NODE_ENV,
+  // mode: NODE_ENV,
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/',
