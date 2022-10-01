@@ -12,7 +12,7 @@ app.use('/dist', express.static(path.join(__dirname, '../dist')));
 // Respond with index.html for inital webpage
 // If index.html is in same folder as css VV
 // app.use('/', express.static(path.join(__dirname, '../dist/build')));
-
+// app.use(express.static(path.resolve(__dirname, '../client')));
 app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../client/index.html'));
 });
