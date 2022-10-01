@@ -2,14 +2,15 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const apiRouter = require('./routes/leaderboardApi.js');
-const usersRouter = require('./routes/usersApi.js');
+const userRouter = require('./routes/userApi.js');
 
 // Code convention: production port is on 3000
 const PORT = 3000;
 app.use(express.json());
 
+console.log('received request');
 app.use('/leaderboardApi', apiRouter);
-app.use('/usersApi', usersRouter);
+app.use('/userApi', userRouter);
 
 // statically serve everything in the build folder on the route '/build'
 app.use('/dist', express.static(path.join(__dirname, '../dist')));
