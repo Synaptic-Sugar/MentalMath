@@ -35,6 +35,11 @@ module.exports = {
         'secure': false,
         'changeOrigin': true
       },
+      '/usersApi/**': {
+        'target': 'http://[::1]:3000',
+        'secure': false,
+        'changeOrigin': true
+      },
     }
   },
   module:{
