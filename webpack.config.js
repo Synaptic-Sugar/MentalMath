@@ -22,7 +22,7 @@ module.exports = {
   ],
   resolve: {
     // Enable importing JS / JSX files without specifying their extension
-    extensions: [".js", '.jsx']
+    extensions: ['.js', '.jsx']
   },
   devServer: {
     static: {
@@ -30,7 +30,12 @@ module.exports = {
     },
     port: 8080,
     proxy: {
-      '/api/**': {
+      '/leaderboardApi/**': {
+        'target': 'http://[::1]:3000',
+        'secure': false,
+        'changeOrigin': true
+      },
+      '/userApi/**': {
         'target': 'http://[::1]:3000',
         'secure': false,
         'changeOrigin': true
@@ -62,4 +67,4 @@ module.exports = {
   }
 
 
-}
+};

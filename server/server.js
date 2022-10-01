@@ -1,11 +1,16 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-
+const apiRouter = require('./routes/leaderboardApi.js');
+const userRouter = require('./routes/userApi.js');
 
 // Code convention: production port is on 3000
 const PORT = 3000;
 app.use(express.json());
+
+console.log('received request');
+app.use('/leaderboardApi', apiRouter);
+app.use('/userApi', userRouter);
 
 // statically serve everything in the build folder on the route '/build'
 app.use('/dist', express.static(path.join(__dirname, '../dist')));
@@ -25,14 +30,14 @@ app.use((req, res) => res.sendStatus(404));
 
 // Global error handler, will trigger if any errors occur when handling requests
 app.use((err, req, res, next) => {
-    const defaultErr = {
-      log: 'Error occured during middleware execution',
-      status: 400,
-      message: { err: 'An error occurred' },
-    };
-    const errorObj = Object.assign({}, defaultErr, err);
-    console.log(errorObj.log);
-    return res.status(errorObj.status).json(errorObj.message);
+  const defaultErr = {
+    log: 'Error occured during middleware execution',
+    status: 400,
+    message: { err: 'An error occurred' },
+  };
+  const errorObj = Object.assign({}, defaultErr, err);
+  console.log(errorObj.log);
+  return res.status(errorObj.status).json(errorObj.message);
 });
 // Starts server listening on port 
 app.listen(PORT, () => console.log(`Server started. Listening on PORT: ${PORT}`));
