@@ -16,7 +16,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'webpack boilerplate',
-      template: '/client/index.html'
+      template: './client/index.html'
     }),
     new CleanWebpackPlugin(),
   ],
