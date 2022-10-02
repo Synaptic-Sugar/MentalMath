@@ -3,34 +3,33 @@ const userController = require('../controllers/userController.js');
 const sessionController = require('../controllers/sessionController.js');
 const cookieController = require('../controllers/cookieController.js');
 const router = express.Router();
+// const session = require('express-session');
 
 function signupLogger (req, res, next) {
   console.log('entered crete user post request');
   return next();
-};
+}
 
 function verifyLogger (req, res, next) {
   console.log('entered verify user post request');
   return next();
-};
+}
 
-// session controller commented out until querys are ready 
 router.post('/signup',
   signupLogger,
   cookieController.setCookie,
   userController.createUser,
-  // sessionController.startSession,
+  sessionController.startSession,
   cookieController.setSSIDCookie,
   (req, res) => {
     // return res.status(200).json(res.locals.username);
     return res.redirect('/playGame');
 });
 
-// session controller commented out until querys are ready 
 router.post('/login',
   verifyLogger,
   userController.verifyUser,
-  // sessionController.startSession,
+  sessionController.startSession,
   cookieController.setSSIDCookie,
   (req, res) => {
     // return res.status(200).json(res.locals.username);
@@ -40,7 +39,7 @@ router.post('/login',
 // user logout (streach feature)
 router.post('/logout',
   userController.verifyUser,
-  // sessionController.endSession,
+  sessionController.endSession,
   (req, res) => {
     // return res.status(200).json(res.locals.username);
     return res.redirect('/login');
