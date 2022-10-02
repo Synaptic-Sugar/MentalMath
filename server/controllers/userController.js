@@ -14,8 +14,7 @@ userController.createUser = (req, res, next) => {
   // hash password before adding to database 
   const hash = bcrypt.hashSync(password, 10);
   console.log('New User with hashed pass: ', username, hash);
-  // in this query add in the username and hash(not password)
-  // const insertQuery = 'INSERT INTO users ( _id, 'users."username"', 'users."password"' ) VALUES ( DEFAULT, $1, $2 )';
+  // in this query add in the username and hash (not password)
   const insertQuery = 'INSERT INTO UsersTable ( _id, Username, Password ) VALUES ( DEFAULT, $1, $2 )';
   db.query(insertQuery, [ username, hash ] )
     // after added to database, report back (with only username for privacy)
@@ -38,8 +37,8 @@ userController.verifyUser = (req, res, next) => {
     return next('Missing username or password in userController.verifyUser');
   }
 
-  const verifyQuery = '...';
-  db.query(verifyQuery)
+  const verifyQuery = 'SELECT * FROM UserTable WHERE Username = $1';
+  db.query(verifyQuery, [ username ])
     .then((user) => {
       if (!user) {
         res.redirect('/signup');
@@ -64,7 +63,7 @@ userController.verifyUser = (req, res, next) => {
 };
 
 userController.getAllUsers = (req, res, next) => {
-  const selectAllQuery = 'SELECT * FROM UsersTable;';
+  const selectAllQuery = 'SELECT * FROM UsersTable';
   db.query(selectAllQuery)
     .then((docs) => {
       res.locals.allUsers = docs;
@@ -80,10 +79,10 @@ userController.getAllUsers = (req, res, next) => {
 
 userController.getOneUser = (req, res, next) => {
   const id = req.params.id;
-  const getOneQuery = '';
-  db.query(getOneQuery)
+  const getOneQuery = 'SELECT * FROM UsersTable WHERE _id = $1';
+  db.query(getOneQuery, [ id ])
     .then((docs) => {
-      res.locals.allUsers = docs;
+      res.locals.username = docs.username;
       return next(); 
     })
     . catch(err => {
@@ -92,7 +91,44 @@ userController.getOneUser = (req, res, next) => {
         message: { err: 'Error in userController.getAllUsers. Check logs for details.' }
       });
     });
+};
 
+userController.updateUsername = (req, res, next) => {
+  const id = req.params.id;
+  const { username } = req.body;
+  const getOneQuery = 'UPDATE UsersTable SET Username = $1 WHERE _id = $2;';
+  db.query(getOneQuery, [ username, id ])
+    .then((docs) => {
+      res.locals.newUsername = docs.username;
+      return next(); 
+    })
+    . catch(err => {
+      return next({
+        log: `userController.getAllUsers: ERROR: ${err}`,
+        message: { err: 'Error in userController.getAllUsers. Check logs for details.' }
+      });
+    });
+};
+
+userController.updatePassword = (req, res, next) => {
+  const id = req.params.id;
+  const { password } = req.body;
+
+  // gotta hash the password first! 
+  const hash = bcrypt.hashSync(password, 10);
+
+  const newPassQuery = 'UPDATE UsersTable SET Password = $1 WHERE _id = $2';
+  db.query(newPassQuery, [ hash, id ])
+    .then((docs) => {
+      res.locals.username = docs;
+      return next(); 
+    })
+    . catch(err => {
+      return next({
+        log: `userController.getAllUsers: ERROR: ${err}`,
+        message: { err: 'Error in userController.getAllUsers. Check logs for details.' }
+      });
+    });
 };
 
 module.exports = userController;
