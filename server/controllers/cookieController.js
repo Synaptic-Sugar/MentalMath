@@ -17,6 +17,13 @@ cookieController.setSSIDCookie = (req, res, next) => {
   return next();
 };
 
+cookieController.setSSIDCookieAuth = (req, res, next) => {
+  res.cookie('ssid', res.locals.token, {
+    expires: new Date(Date.now() + 900000)
+  });
+  return next();
+};
+
 cookieController.deleteSSIDCookie = (req, res, next) => {
   res.cookie('ssid', '');
   return next();

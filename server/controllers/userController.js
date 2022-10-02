@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const db = require('../models/models.js');
 // const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const userController = {};
 
@@ -73,6 +74,30 @@ userController.getAllUsers = (req, res, next) => {
       return next({
         log: `userController.getAllUsers: ERROR: ${err}`,
         message: { err: 'Error in userController.getAllUsers. Check logs for details.' }
+      });
+    });
+};
+
+// Here we process oauth-callback 
+userController.getAccessToken = (req, res, next) => {
+  const { query: { code } } = req;
+  const body = {
+    client_id : process.env.GITHUB_CLIENT_ID,
+    client_secret: process.env.GITHUB_CLIENT_SECRET,
+    code,
+  };
+  const opts = { headers: { accept: 'application/json'} };
+  router.post('https://github.com/login/oauth/access_token', body, opts)
+    .then( res => res.data.access_token)
+    .then( token => {
+      console.log('my token: ', token);
+      res.locals.token = token;
+      return next();
+    })
+    .catch (err => {
+      return next({
+        log: `oauth-callback error: ERROR: ${err} `,
+        message: {error: 'Error found in oauth-callback. See logs for more details'}
       });
     });
 };

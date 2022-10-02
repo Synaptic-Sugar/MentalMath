@@ -5,6 +5,7 @@ const cookieController = require('../controllers/cookieController.js');
 const router = express.Router();
 // const session = require('express-session');
 
+
 function signupLogger (req, res, next) {
   console.log('Signup logger: entered crete user post request');
   return next();
@@ -53,6 +54,20 @@ router.get('/secret/getUsers',
     return res.status(200).json(res.locals.allUsers);
 });
 
+// to navigate to github to login with OAuth
+router.get('/auth', (req, res) => {
+  return res.redirect(`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}`);
+});
+
+// to navigate to github to login with OAuth
+router.get('/oauth-callback',
+  userController.getAccessToken,
+  sessionController.startSessionAuth,
+  cookieController.setSSIDCookieAuth,
+  (req, res) => {
+    return res.status(200).json(res.locals.token);
+});
+
 // only for backend use to test server
 router.get('users/:id',
   userController.getOneUser,
@@ -61,7 +76,7 @@ router.get('users/:id',
 });
 
 // update username (streach feature)
-router.put('users/newName/:id',
+router.put('newName/:id',
   userController.updateUsername,
   (req, res) => {
     // return res.status(200).json(res.locals.newUsername);
@@ -69,7 +84,7 @@ router.put('users/newName/:id',
 });
 
 // update password (streach feature)
-router.put('users/newPass/:id',
+router.put('newPass/:id',
   userController.updatePassword,
   (req, res) => {
     // return res.status(200).json(res.locals.username);

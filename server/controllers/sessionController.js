@@ -30,9 +30,30 @@ sessionController.isLoggedIn = (req, res, next) => {
 };
 
 sessionController.startSession = (req, res, next) => {
-  const cookieId = res.locals.user._id.id;
+  const id = res.locals.user._id.id;
   const addSessionQuery = 'INSERT INTO SessionTable ( CookieId, CreatedAt ) VALUES ( $1, DEFAULT )';
-  Session.query(addSessionQuery, [ cookieId ])
+  Session.query(addSessionQuery, [ id ])
+    .then((docs) => {
+      if (!docs) {
+        // no session found, redirect to signup
+        res.redirect('/signup');
+      } else {
+        // session found
+        return next();
+      }
+    })
+    . catch(err => {
+      return next({
+        log: `sessionController.startSession: ERROR: ${err}`,
+        message: { err: 'Error in sessionController.startSession. Check logs for details.' }
+      });
+    });
+};
+
+sessionController.startSessionAuth = (req, res, next) => {
+  const id = res.locals.token;
+  const addSessionQuery = 'INSERT INTO SessionTable ( CookieId, CreatedAt ) VALUES ( $1, DEFAULT )';
+  Session.query(addSessionQuery, [ id ])
     .then((docs) => {
       if (!docs) {
         // no session found, redirect to signup
