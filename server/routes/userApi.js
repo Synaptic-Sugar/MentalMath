@@ -14,51 +14,63 @@ function verifyLogger (req, res, next) {
   return next();
 };
 
+// session controller commented out until querys are ready 
 router.post('/signup',
   signupLogger,
+  cookieController.setCookie,
   userController.createUser,
-  sessionController.startSession,
+  // sessionController.startSession,
   cookieController.setSSIDCookie,
   (req, res) => {
     // return res.status(200).json(res.locals.username);
     return res.redirect('/playGame');
 });
 
+// session controller commented out until querys are ready 
 router.post('/login',
   verifyLogger,
   userController.verifyUser,
-  sessionController.startSession,
+  // sessionController.startSession,
   cookieController.setSSIDCookie,
   (req, res) => {
     // return res.status(200).json(res.locals.username);
     return res.redirect('/playGame');
 });
 
-router.get('/secret/users',
+// user logout (streach feature)
+router.post('/logout',
+  userController.verifyUser,
+  // sessionController.endSession,
+  (req, res) => {
+    // return res.status(200).json(res.locals.username);
+    return res.redirect('/login');
+});
+
+// only for backend use to test server 
+router.get('/secret/getUsers',
   userController.getAllUsers,
   (req, res) => {
     return res.status(200).json(res.locals.allUsers);
 });
 
+// only for backend use to test server
 router.get('users/:id',
   userController.getOneUser,
   (req, res) => {
     return res.status(200).json(res.locals.username);
 });
 
-router.put('users/newPass/:id',
+// update username (streach feature)
+router.put('users/newName/:id',
   userController.updateUsername,
-  sessionController.startSession,
-  cookieController.setSSIDCookie,
   (req, res) => {
     // return res.status(200).json(res.locals.newUsername);
     return res.redirect('/login');
 });
 
+// update password (streach feature)
 router.put('users/newPass/:id',
   userController.updatePassword,
-  sessionController.startSession,
-  cookieController.setSSIDCookie,
   (req, res) => {
     // return res.status(200).json(res.locals.username);
     return res.redirect('/login');
