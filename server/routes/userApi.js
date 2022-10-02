@@ -6,12 +6,12 @@ const router = express.Router();
 // const session = require('express-session');
 
 function signupLogger (req, res, next) {
-  console.log('entered crete user post request');
+  console.log('Signup logger: entered crete user post request');
   return next();
 }
 
 function verifyLogger (req, res, next) {
-  console.log('entered verify user post request');
+  console.log('verify logger: entered verify user post request');
   return next();
 }
 
@@ -22,8 +22,8 @@ router.post('/signup',
   sessionController.startSession,
   cookieController.setSSIDCookie,
   (req, res) => {
-    // return res.status(200).json(res.locals.username);
-    return res.redirect('/playGame');
+    return res.status(200).json(res.locals.username);
+    // return res.redirect('/playGame');
 });
 
 router.post('/login',
@@ -32,17 +32,18 @@ router.post('/login',
   sessionController.startSession,
   cookieController.setSSIDCookie,
   (req, res) => {
-    // return res.status(200).json(res.locals.username);
-    return res.redirect('/playGame');
+    return res.status(200).json(res.locals.username);
+    // return res.redirect('/playGame');
 });
 
 // user logout (streach feature)
 router.post('/logout',
   userController.verifyUser,
   sessionController.endSession,
+  cookieController.deleteSSIDCookie,
   (req, res) => {
-    // return res.status(200).json(res.locals.username);
-    return res.redirect('/login');
+    return res.status(200).json('Session ended: logged out');
+    // return res.redirect('/login');
 });
 
 // only for backend use to test server 

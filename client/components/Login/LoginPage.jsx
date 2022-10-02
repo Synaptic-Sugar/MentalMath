@@ -4,50 +4,66 @@ import LoginView from './LoginView';
 
 
 class LoginPage extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            isValidUser: false,
-            showView: 'login'
-        }
-        this.validateUser = this.validateUser.bind(this);
-        this.renderView = this.renderView.bind(this);
-        this.showView = this.showView.bind(this);
-    }
-    validateUser(){
+  constructor(props){
+    super(props);
+    this.state = {
+      isValidUser: false,
+      showView: 'login'
+    };
+    this.validateUser = this.validateUser.bind(this);
+    this.renderView = this.renderView.bind(this);
+    this.showView = this.showView.bind(this);
+  }
+
+  validateUser(username, password){
+    const body = { username, password};
+    fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then((data) => {
+        console.log(data);
         this.setState({
-            ...this.state,
-            isValidUser: true
-        })
+          ...this.state,
+          isValidUser: true,
+          'username': data.username
+        });
+      })
+      .catch(err => console.log('Login fetch /login: ERROR: ', err));
+  }
+
+  showView(view){
+    this.setState({
+      ...this.state,
+      showView: view
+    });
+  }
+  renderView(view){
+    switch(view){
+    case 'login':
+      return <LoginView validateUser={this.validateUser} showView={this.showView} isValidUser={this.state.isValidUser}/>
+      break;
+    case 'signup':
+      return (
+        <div>Sign up</div>
+      );
+      break;
+    default:
+      break;
     }
-    showView(view){
-        this.setState({
-            ...this.state,
-            showView: view
-        })
-    }
-    renderView(view){
-        switch(view){
-            case 'login':
-                return <LoginView validateUser={this.validateUser} showView={this.showView} isValidUser={this.state.isValidUser}/>
-                break;
-            case 'signup':
-                return (
-                    <div>Sign up</div>
-                )
-                break;
-            default:
-                break;
-        }
-    }
-    render(){
-        const view = this.renderView(this.state.showView)
-        return(
-            <div>
-                {view}
-            </div>
-        )
-    }
+  }
+  render(){
+    const view = this.renderView(this.state.showView)
+    return(
+      <div>
+        {view}
+      </div>
+    );
+  }
 }
 
 export default LoginPage;

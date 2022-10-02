@@ -2,7 +2,7 @@ const { Pool, Client } = require('pg');
 const pg = require('pg');
 
 const PG_URI = 'postgres://sufbfcso:FGwsuHdibl3tUfJRwAwS83xh4RX-K3g3@heffalump.db.elephantsql.com/sufbfcso';
-
+console.log('connected to postgres database');
 // const pool = new Pool ({
 //   connectionString: PG_URI
 // });

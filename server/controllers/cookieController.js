@@ -17,4 +17,9 @@ cookieController.setSSIDCookie = (req, res, next) => {
   return next();
 };
 
+cookieController.deleteSSIDCookie = (req, res, next) => {
+  res.cookie('ssid', '');
+  return next();
+};
+
 module.exports = cookieController;
