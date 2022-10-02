@@ -30,12 +30,14 @@ class LoginPage extends Component {
     switch(view){
     case 'login':
       return <LoginView validateUser={this.validateUser} showView={this.showView} isValidUser={this.state.isValidUser}/>;
-      break;
     case 'signup':
       return (
         <div>Sign up</div>
       );
-      break;
+    case 'oAuth':
+    return (
+    <div>Sign up</div>
+    );
     default:
       break;
     }
