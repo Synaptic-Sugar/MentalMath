@@ -14,12 +14,31 @@ class LoginPage extends Component {
     this.renderView = this.renderView.bind(this);
     this.showView = this.showView.bind(this);
   }
-  validateUser(){
-    this.setState({
-      ...this.state,
-      isValidUser: true
-    });
+
+  validateUser (username, password){
+    const body = { 'username': username, 'password': password };
+    fetch('/userApi/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+      .then(res => {
+        console.log('res: ', res);
+        return res.json();
+      })
+      .then((data) => {
+        console.log('data: ', data);
+        this.setState({
+          ...this.state,
+          isValidUser: true,
+          'username': data
+        });
+      })
+      .catch(err => console.log('Login fetch /login: ERROR: ', err));
   }
+
   showView(view){
     this.setState({
       ...this.state,
@@ -29,12 +48,8 @@ class LoginPage extends Component {
   renderView(view){
     switch(view){
     case 'login':
-      return <LoginView validateUser={this.validateUser} showView={this.showView} isValidUser={this.state.isValidUser}/>;
+      return <LoginView validateUser={this.validateUser} showView={this.showView} isValidUser={this.state.isValidUser}/>
     case 'signup':
-      return (
-        <div>Sign up</div>
-      );
-    case 'oAuth':
       return (
         <div>Sign up</div>
       );
@@ -43,7 +58,7 @@ class LoginPage extends Component {
     }
   }
   render(){
-    const view = this.renderView(this.state.showView);
+    const view = this.renderView(this.state.showView)
     return(
       <div>
         {view}

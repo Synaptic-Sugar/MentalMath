@@ -3,10 +3,12 @@ const app = express();
 const path = require('path');
 const apiRouter = require('./routes/leaderboardApi.js');
 const userRouter = require('./routes/userApi.js');
+const cookieParser = require('cookie-parser');
 
 // Code convention: production port is on 3000
 const PORT = 3000;
 app.use(express.json());
+app.use(cookieParser());
 
 console.log('received request');
 app.use('/leaderboardApi', apiRouter);
