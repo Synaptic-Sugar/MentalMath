@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import LoginPage from './Login/LoginPage';
 import GamePage from './Game/GamePage';
 import LeaderboardPage from './Leaderboard/LeaderboardPage';
+import StartPage from './Start/StartPage';
 import '../styles/main.scss';
 
 // use <Link to=""></Link> as replacements for anchors
@@ -14,6 +15,10 @@ const App = props => {
         <Route
           path="/"
           element = {<LoginPage/>}
+        />
+        <Route
+          path = "/startpage"
+          element = {<StartPage/>}
         />
         <Route
           path = "/gamepage"

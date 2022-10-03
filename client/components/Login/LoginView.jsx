@@ -8,7 +8,7 @@ const LoginView = props =>
       <input id='password'></input>
       <button id='submit' onClick={props.validateUser}>Login</button>
       <button id='signup' onClick={()=> props.showView('signup')}>signup</button>
-      { props.isValidUser && (<Navigate id='gameNavigation' to='/gamepage'/>)}
+      { props.isValidUser && (<Navigate id='gameNavigation' to='/startpage'/>)}
     </div>
   );
 
