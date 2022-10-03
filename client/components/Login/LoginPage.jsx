@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 import LoginView from './LoginView';
 
 
@@ -46,12 +46,10 @@ class LoginPage extends Component {
     switch(view){
     case 'login':
       return <LoginView validateUser={this.validateUser} showView={this.showView} isValidUser={this.state.isValidUser}/>
-      break;
     case 'signup':
       return (
         <div>Sign up</div>
       );
-      break;
     default:
       break;
     }
