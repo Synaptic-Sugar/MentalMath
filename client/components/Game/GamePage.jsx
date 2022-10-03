@@ -66,7 +66,7 @@ class GamePage extends Component {
     const view = this.renderView(this.state.showView);
     return(
       <div>
-        {view}
+        <GameView gameMode={ this.state.gameMode } vs={this.state.vs} difficulty={ this.state.difficulty } opponent={ this.state.opponent }/>
       </div>
     );
   }
