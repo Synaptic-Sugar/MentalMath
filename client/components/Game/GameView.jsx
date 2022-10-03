@@ -5,10 +5,15 @@ import Timer from './Timer';
 class GameView extends Component {
     constructor(props){
         super(props);
+        this.initAiTimer;
+        if(props.opponent !== undefined && props.vs === 'ai'){
+            this.initAiTimer = props.opponent.timeToAnswer;
+        }
         this.state = {
             score: 0,
             timer: this.setInitTime(),
             opponentScore: 0,
+            aiTimer: this.initAiTimer,
             lives: 3,
             failedQuestions: new Set(),
             correctAnswers: new Map(),
@@ -23,7 +28,7 @@ class GameView extends Component {
     
     gameOver(){
         // Ends game
-        // Saves game stats in leaderboard
+        // Sends game stats to backend
         // Renders leaderboard view
     }
 
@@ -41,11 +46,29 @@ class GameView extends Component {
     }
 
     countDown(){
-        if(this.state.timer <= 0) this.gameOver();
-        this.setState({
-            ...this.state,
-            timer: this.state.timer - 1
-        });
+
+        if(this.state.timer <= 0 && this.props.gameMode !== '3Lives') this.gameOver();
+        
+        if(this.props.vs !== 'ai'){
+            this.setState({
+                ...this.state,
+                timer: this.state.timer - 1
+            });
+        }
+        else{
+            let newAiTimer = this.state.aiTimer;
+            let opponentScore = this.state.opponentScore;
+            if(newAiTimer <= 0){
+                newAiTimer = this.initAiTimer + 1;
+                opponentScore++;
+            }
+            this.setState({
+                ...this.state,
+                timer: this.state.timer - 1,
+                aiTimer: newAiTimer - 1,
+                opponentScore: opponentScore
+            });
+        }
     }
 
     addToCorrectAnswers(question, completeTime){

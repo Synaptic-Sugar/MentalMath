@@ -24,7 +24,7 @@ class GamePage extends Component {
         gameMode: 'timer60',
         vs: 'solo',
         difficulty: 'easy',
-        opponent: null
+        opponent: undefined
     }
     this.renderView = this.renderView.bind(this);
     this.changeView = this.changeView.bind(this);
@@ -51,9 +51,9 @@ class GamePage extends Component {
   renderView(view){
     switch(view){
         case 'start':
-          return <StartView startGame={ (gameMode, vs, difficulty)=> this.startGame(gameMode, vs, difficulty) } />;
+          return <StartView startGame={ (gameMode, vs, difficulty, opponent)=> this.startGame(gameMode, vs, difficulty, opponent) } />;
         case 'game':
-          return <GameView gameMode={ this.state.gameMode } vs={this.state.vs} difficulty={ this.state.difficulty }/>;
+          return <GameView gameMode={ this.state.gameMode } vs={this.state.vs} difficulty={ this.state.difficulty } opponent={ this.state.opponent }/>;
         case 'leaderboard':
         return (
         <div>GameOver</div>

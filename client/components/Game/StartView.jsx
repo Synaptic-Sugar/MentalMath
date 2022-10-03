@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-
+import AiProfiles from './Multiplayer/AiProfiles';
 
 /* Game Modes:
     1. Timer ( question difficulty increases related to timer count down: 30s, 60s)
@@ -20,6 +20,12 @@ const StartView = props =>{
     const [gameMode, setGameMode] = useState('timer60');
     const [vs, setVs] = useState('solo');
     const [difficulty, setDifficulty] = useState('easy');
+    const [opponent, setOpponent] = useState(AiProfiles[0]);
+
+    const selectAiOpponent = (index)=>{
+        setOpponent(AiProfiles[index]);
+    }
+
     const gameModeStyle = (mode)=>{
         return mode === gameMode ? {'backgroundColor': 'green'} : {'backgroundColor': 'grey'};
     }
@@ -29,9 +35,10 @@ const StartView = props =>{
     const difficultyStyle = (diff)=>{
        return diff === difficulty ? {'backgroundColor': 'green'} : {'backgroundColor': 'grey'};
     }
+
     return (
         <div id='startView'>
-            <button id='start' onClick={ ()=> props.startGame(gameMode, vs, difficulty) }>Start</button>
+            <button id='start' onClick={ ()=> props.startGame(gameMode, vs, difficulty, opponent) }>Start</button>
             <button id='leaderboard' onClick={ ()=> props.renderGameView('leaderboard') }>Leaderboards</button>
             <div id='gameMode'>Game Mode:
                 <button className='btnGameMode'  style={ gameModeStyle('timer60') } onClick={ ()=> setGameMode('timer60') }>60 Second Sprint</button>
