@@ -1,53 +1,55 @@
 import React, { Component } from 'react';
-import { Navigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 import LoginView from './LoginView';
 
 
 class LoginPage extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            isValidUser: false,
-            showView: 'login'
-        }
-        this.validateUser = this.validateUser.bind(this);
-        this.renderView = this.renderView.bind(this);
-        this.showView = this.showView.bind(this);
+  constructor(props){
+    super(props);
+    this.state = {
+      isValidUser: false,
+      showView: 'login'
+    };
+    this.validateUser = this.validateUser.bind(this);
+    this.renderView = this.renderView.bind(this);
+    this.showView = this.showView.bind(this);
+  }
+  validateUser(){
+    this.setState({
+      ...this.state,
+      isValidUser: true
+    });
+  }
+  showView(view){
+    this.setState({
+      ...this.state,
+      showView: view
+    });
+  }
+  renderView(view){
+    switch(view){
+    case 'login':
+      return <LoginView validateUser={this.validateUser} showView={this.showView} isValidUser={this.state.isValidUser}/>;
+    case 'signup':
+      return (
+        <div>Sign up</div>
+      );
+    case 'oAuth':
+      return (
+        <div>Sign up</div>
+      );
+    default:
+      break;
     }
-    validateUser(){
-        this.setState({
-            ...this.state,
-            isValidUser: true
-        })
-    }
-    showView(view){
-        this.setState({
-            ...this.state,
-            showView: view
-        })
-    }
-    renderView(view){
-        switch(view){
-            case 'login':
-                return <LoginView validateUser={this.validateUser} showView={this.showView} isValidUser={this.state.isValidUser}/>
-                break;
-            case 'signup':
-                return (
-                    <div>Sign up</div>
-                )
-                break;
-            default:
-                break;
-        }
-    }
-    render(){
-        const view = this.renderView(this.state.showView)
-        return(
-            <div>
-                {view}
-            </div>
-        )
-    }
+  }
+  render(){
+    const view = this.renderView(this.state.showView);
+    return(
+      <div>
+        {view}
+      </div>
+    );
+  }
 }
 
 export default LoginPage;
