@@ -4,6 +4,7 @@ const db = require('../models/models.js');
 require('dotenv').config();
 const express = require('express');
 const app = express();
+const fetch = require('node-fetch');
 
 
 const userController = {};
@@ -83,32 +84,39 @@ userController.getAllUsers = (req, res, next) => {
     });
 };
 
-// // Here we process oauth-callback 
-// userController.getAccessToken = (req, res, next) => {
-//   const { query: { code } } = req;
-//   const body = {
-//     client_id : process.env.GITHUB_CLIENT_ID,
-//     client_secret: process.env.GITHUB_CLIENT_SECRET,
-//     code,
-//   };
-//   const opts = { headers: { accept: 'application/json'} };
-//   // change to fetch request 
-//   .post('https://github.com/login/oauth/access_token', body, opts)
-//     .then( res => res.data.access_token)
-//     // also ask for username here
-//     .then( token => {
-//       console.log('my token: ', token);
-//       // also add username to res.locals
-//       res.locals.token = token;
-//       return next();
-//     })
-//     .catch (err => {
-//       return next({
-//         log: `oauth-callback error: ERROR: ${err} `,
-//         message: {error: 'Error found in oauth-callback. See logs for more details'}
-//       });
-//     });
-// };
+// Here we process oauth-callback 
+userController.getAccessToken = async (req, res, next) => {
+  let body;
+  try{
+    const { query: { code } } = req;
+    body = {
+      client_id : process.env.GITHUB_CLIENT_ID,
+      client_secret: process.env.GITHUB_CLIENT_SECRET,
+      code,
+    };
+  }
+  catch(err){
+    return next({
+      log: `oauth-callback error: ERROR: ${err} `,
+      message: {error: 'Error creating body for oAuth request, src: userController.getAccessToken()'}
+    });
+  }
+  try{
+    const response = await fetch('https://github.com/login/oauth/access_token', {
+      method: 'POST',
+      headers: { accept: 'application/json'},
+      body: JSON.stringify(body)
+    });
+    res.locals.token = await response.data.access_token;
+    return next();
+  }
+  catch(err){
+    return next({
+      log: `oauth-callback error: ERROR: ${err} `,
+      message: {error: 'Error found in userController.getAccessToken. See logs for more details'}
+    });
+  }
+};
 
 userController.getOneUser = (req, res, next) => {
   const username = req.params.username;

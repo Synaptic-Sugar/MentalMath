@@ -5,7 +5,6 @@ const cookieController = require('../controllers/cookieController.js');
 const router = express.Router();
 // const session = require('express-session');
 
-
 function signupLogger (req, res, next) {
   console.log('Signup logger: entered crete user post request');
   return next();
@@ -34,7 +33,6 @@ router.post('/login',
   cookieController.setSSIDCookie,
   (req, res) => {
     return res.status(200).json(res.locals.username);
-    // return res.redirect('/playGame');
 });
 
 // user logout (streach feature)
@@ -44,7 +42,6 @@ router.post('/logout/:username',
   cookieController.deleteSSIDCookie,
   (req, res) => {
     return res.status(200).json('Session ended: logged out');
-    // return res.redirect('/login');
 });
 
 // only for backend use to test server 
@@ -59,15 +56,15 @@ router.get('/auth', (req, res) => {
   return res.redirect(`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}`);
 });
 
-// // to navigate to github to login with OAuth
-// router.get('/oauth-callback',
-//   userController.getAccessToken,
-//   userController.createOrFindUser,// need to build this
-//   sessionController.startSessionAuth,
-//   cookieController.setSSIDCookieAuth,
-//   (req, res) => {
-//     return res.status(200).json(res.locals.token);
-// });
+// to navigate to github to login with OAuth
+router.get('/oauth-callback',
+  userController.getAccessToken,
+  // userController.createOrFindUser,// need to build this
+  // sessionController.startSessionAuth,
+  // cookieController.setSSIDCookieAuth,
+  (req, res) => {
+    return res.status(200).json(res.locals.token);
+});
 
 // only for backend use to test server
 router.get('/users/:username',
