@@ -15,22 +15,25 @@ class LoginPage extends Component {
     this.showView = this.showView.bind(this);
   }
 
-  validateUser(username, password){
-    const body = { username, password};
-    fetch('/api/login', {
+  validateUser (username, password){
+    const body = { 'username': username, 'password': password };
+    fetch('/userApi/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
     })
-      .then(res => res.json())
+      .then(res => {
+        console.log('res: ', res);
+        return res.json();
+      })
       .then((data) => {
-        console.log(data);
+        console.log('data: ', data);
         this.setState({
           ...this.state,
           isValidUser: true,
-          'username': data.username
+          'username': data
         });
       })
       .catch(err => console.log('Login fetch /login: ERROR: ', err));
