@@ -5,7 +5,7 @@ class Timer extends Component{
     constructor(props){
         super(props);
         this.state = {
-            timer: 60
+            timer: props.time
         };
         this.setGameOver = props.setGameOver;
     }
@@ -26,7 +26,7 @@ class Timer extends Component{
 
     render(){
         return(
-            <div>
+            <div id='timer'>
                 {this.state.timer}
             </div>
         )
