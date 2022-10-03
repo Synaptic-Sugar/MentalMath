@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Navigate } from 'react-router-dom';
 import LoginView from './LoginView';
+import SignUpView from './SignUpView';
 
 
 class LoginPage extends Component {
@@ -10,7 +11,9 @@ class LoginPage extends Component {
       isValidUser: false,
       showView: 'login'
     };
+    this.goToGit = this.goToGit.bind(this);
     this.validateUser = this.validateUser.bind(this);
+    this.signUpUser = this.signUpUser.bind(this);
     this.renderView = this.renderView.bind(this);
     this.showView = this.showView.bind(this);
   }
@@ -32,10 +35,38 @@ class LoginPage extends Component {
         console.log('data: ', data);
         this.setState({
           ...this.state,
-          isValidUser: true,
+          isValidUser: data === username,
           'username': data
         });
       })
+      .catch(err => console.log('Login fetch /login: ERROR: ', err));
+  }
+  signUpUser (username, password){
+    const body = { 'username': username, 'password': password };
+    fetch('/userApi/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+      .then(res => {
+        console.log('res: ', res);
+        return res.json();
+      })
+      .then((data) => {
+        console.log('data: ', data);
+        this.setState({
+          ...this.state,
+          isValidUser: data === username,
+          'username': data
+        });
+      })
+      .catch(err => console.log('Login fetch /login: ERROR: ', err));
+  }
+
+  goToGit(){
+    fetch('/userApi/auth')
       .catch(err => console.log('Login fetch /login: ERROR: ', err));
   }
 
@@ -48,11 +79,9 @@ class LoginPage extends Component {
   renderView(view){
     switch(view){
     case 'login':
-      return <LoginView validateUser={this.validateUser} showView={this.showView} isValidUser={this.state.isValidUser}/>
+      return <LoginView validateUser={this.validateUser} username={this.state.username} showView={this.showView} isValidUser={this.state.isValidUser} goToGit={this.goToGit}/>
     case 'signup':
-      return (
-        <div>Sign up</div>
-      );
+      return <SignUpView signUpUser={this.signUpUser} username={this.state.username} showView={this.showView} isValidUser={this.state.isValidUser} goToGit={this.goToGit}/>
     default:
       break;
     }
