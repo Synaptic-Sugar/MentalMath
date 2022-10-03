@@ -11,7 +11,7 @@ cookieController.setCookie = (req, res, next) => {
 };
 
 cookieController.setSSIDCookie = (req, res, next) => {
-  res.cookie('ssid', res.locals.user._id.id, {
+  res.cookie('ssid', res.locals.username, {
     expires: new Date(Date.now() + 900000)
   });
   return next();

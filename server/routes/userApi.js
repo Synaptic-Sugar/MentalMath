@@ -38,8 +38,8 @@ router.post('/login',
 });
 
 // user logout (streach feature)
-router.post('/logout',
-  userController.verifyUser,
+router.post('/logout/:username',
+  userController.getOneUser,
   sessionController.endSession,
   cookieController.deleteSSIDCookie,
   (req, res) => {
@@ -59,37 +59,38 @@ router.get('/auth', (req, res) => {
   return res.redirect(`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}`);
 });
 
-// to navigate to github to login with OAuth
-router.get('/oauth-callback',
-  userController.getAccessToken,
-  sessionController.startSessionAuth,
-  cookieController.setSSIDCookieAuth,
-  (req, res) => {
-    return res.status(200).json(res.locals.token);
-});
+// // to navigate to github to login with OAuth
+// router.get('/oauth-callback',
+//   userController.getAccessToken,
+//   userController.createOrFindUser,// need to build this
+//   sessionController.startSessionAuth,
+//   cookieController.setSSIDCookieAuth,
+//   (req, res) => {
+//     return res.status(200).json(res.locals.token);
+// });
 
 // only for backend use to test server
-router.get('users/:id',
+router.get('/users/:username',
   userController.getOneUser,
   (req, res) => {
     return res.status(200).json(res.locals.username);
 });
 
-// update username (streach feature)
-router.put('newName/:id',
-  userController.updateUsername,
-  (req, res) => {
-    // return res.status(200).json(res.locals.newUsername);
-    return res.redirect('/login');
-});
+// // update username (streach feature)
+// router.put('/newName/:id',
+//   userController.updateUsername,
+//   (req, res) => {
+//     // return res.status(200).json(res.locals.newUsername);
+//     return res.redirect('/login');
+// });
 
-// update password (streach feature)
-router.put('newPass/:id',
-  userController.updatePassword,
-  (req, res) => {
-    // return res.status(200).json(res.locals.username);
-    return res.redirect('/login');
-});
+// // update password (streach feature)
+// router.put('/newPass/:id',
+//   userController.updatePassword,
+//   (req, res) => {
+//     // return res.status(200).json(res.locals.username);
+//     return res.redirect('/login');
+// });
 
 
 module.exports = router;

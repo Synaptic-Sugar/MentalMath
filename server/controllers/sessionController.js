@@ -1,16 +1,17 @@
 const Session = require('../models/models.js');
+// const bcrypt = require('bcrypt');
 // const session = require('express-session');
 
-// sessionSchema = {
-    //CookieId: {type: String, required: true, unique: true}
-    // CreatedAt: {type: Date, expires: 30, default Date.now}
-//}
+// CREATE TABLE SessionTable ("_id" serial, CookieId varchar(255) NOT NULL, CreatedAt timestamp DEFAULT current_timestamp, CONSTRAINT "SessionTable_pk" PRIMARY KEY ("_id"));
+
+//CookieId: {type: String, required: true, unique: true}
+// CreatedAt: {type: Date, expires: 30, default Date.now}n
 
 const sessionController = {};
 
 sessionController.isLoggedIn = (req, res, next) => {
   const cookieId = req.cookies.ssid;
-  const sessionQuery = 'SELECT * FROM SessionTable WHERE CookieId = $1';
+  const sessionQuery = 'SELECT * FROM SessionTable2 WHERE CookieId = $1';
   Session.query(sessionQuery, [ cookieId ])
     .then((docs) => {
       if (!docs) {
@@ -30,8 +31,10 @@ sessionController.isLoggedIn = (req, res, next) => {
 };
 
 sessionController.startSession = (req, res, next) => {
-  const id = res.locals.user._id.id;
-  const addSessionQuery = 'INSERT INTO SessionTable ( CookieId, CreatedAt ) VALUES ( $1, DEFAULT )';
+  const id = res.locals.username;
+  console.log('id: ', id);
+  // bcrypt the username
+  const addSessionQuery = 'INSERT INTO SessionTable2 ( _id, CookieId, CreatedAt ) VALUES ( DEFAULT, $1, DEFAULT )';
   Session.query(addSessionQuery, [ id ])
     .then((docs) => {
       if (!docs) {
@@ -39,6 +42,7 @@ sessionController.startSession = (req, res, next) => {
         res.redirect('/signup');
       } else {
         // session found
+        // add to the response the bycrpyted username 
         return next();
       }
     })
@@ -52,7 +56,7 @@ sessionController.startSession = (req, res, next) => {
 
 sessionController.startSessionAuth = (req, res, next) => {
   const id = res.locals.token;
-  const addSessionQuery = 'INSERT INTO SessionTable ( CookieId, CreatedAt ) VALUES ( $1, DEFAULT )';
+  const addSessionQuery = 'INSERT INTO SessionTable2 ( CookieId, CreatedAt ) VALUES ( $1, DEFAULT )';
   Session.query(addSessionQuery, [ id ])
     .then((docs) => {
       if (!docs) {
@@ -72,7 +76,7 @@ sessionController.startSessionAuth = (req, res, next) => {
 };
 
 sessionController.endSession = (req, res, next) => {
-  const cookieId = res.locals.user._id.id;
+  const cookieId = res.locals.username;
   const deleteSessionQuery = 'DELETE FROM SessionTable WHERE CookieId = $1';
   Session.query(deleteSessionQuery, [ cookieId ])
     .then((docs) => { 
