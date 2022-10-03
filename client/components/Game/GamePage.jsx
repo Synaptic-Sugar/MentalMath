@@ -20,12 +20,12 @@ class GamePage extends Component {
   constructor(props){
     super(props);
     this.state = {
-        showView: 'start',
-        gameMode: 'timer60',
-        vs: 'solo',
-        difficulty: 'easy',
-        opponent: undefined
-    }
+      showView: 'start',
+      gameMode: 'timer60',
+      vs: 'solo',
+      difficulty: 'easy',
+      opponent: undefined
+    };
     this.renderView = this.renderView.bind(this);
     this.changeView = this.changeView.bind(this);
     this.startGame = this.startGame.bind(this);
@@ -33,41 +33,41 @@ class GamePage extends Component {
 
   changeView(view){
     this.setState({
-        ...this.state,
-        showView: view
-    })
+      ...this.state,
+      showView: view
+    });
   }
   startGame(gameMode, vs, difficulty, opponent){
-      this.setState({
-          ...this.state,
-          showView: 'game',
-          gameMode: gameMode,
-          vs: vs,
-          difficulty: difficulty,
-          opponent: opponent
-      });
+    this.setState({
+      ...this.state,
+      showView: 'game',
+      gameMode: gameMode,
+      vs: vs,
+      difficulty: difficulty,
+      opponent: opponent
+    });
   }
 
   renderView(view){
     switch(view){
-        case 'start':
-          return <StartView startGame={ (gameMode, vs, difficulty, opponent)=> this.startGame(gameMode, vs, difficulty, opponent) } />;
-        case 'game':
-          return <GameView gameMode={ this.state.gameMode } vs={this.state.vs} difficulty={ this.state.difficulty } opponent={ this.state.opponent }/>;
-        case 'leaderboard':
-        return (
+    case 'start':
+      return <StartView startGame={ (gameMode, vs, difficulty, opponent)=> this.startGame(gameMode, vs, difficulty, opponent) } />;
+    case 'game':
+      return <GameView gameMode={ this.state.gameMode } vs={this.state.vs} difficulty={ this.state.difficulty } opponent={ this.state.opponent }/>;
+    case 'leaderboard':
+      return (
         <div>GameOver</div>
-        );
-        default:
-          break;
-        }
+      );
+    default:
+      break;
+    }
   }
   render(){
     const view = this.renderView(this.state.showView);
     return(
-        <div>
-            {view}
-        </div>
+      <div>
+        {view}
+      </div>
     );
   }
 }

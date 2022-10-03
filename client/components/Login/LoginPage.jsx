@@ -35,9 +35,9 @@ class LoginPage extends Component {
         <div>Sign up</div>
       );
     case 'oAuth':
-    return (
-    <div>Sign up</div>
-    );
+      return (
+        <div>Sign up</div>
+      );
     default:
       break;
     }
