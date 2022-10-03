@@ -23,7 +23,8 @@ class GamePage extends Component {
         showView: 'start',
         gameMode: 'timer60',
         vs: 'solo',
-        difficulty: 'easy'
+        difficulty: 'easy',
+        opponent: null
     }
     this.renderView = this.renderView.bind(this);
     this.changeView = this.changeView.bind(this);
@@ -36,13 +37,14 @@ class GamePage extends Component {
         showView: view
     })
   }
-  startGame(gameMode, vs, difficulty){
+  startGame(gameMode, vs, difficulty, opponent){
       this.setState({
           ...this.state,
           showView: 'game',
           gameMode: gameMode,
           vs: vs,
-          difficulty: difficulty
+          difficulty: difficulty,
+          opponent: opponent
       });
   }
 
