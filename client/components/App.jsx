@@ -1,7 +1,7 @@
 import React, { Element, Component } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import LoginPage from './Login/LoginPage';
-import GamePage from './Game/GamePage';
+import {GamePageWrapper} from './Game/GamePage';
 import LeaderboardPage from './Leaderboard/LeaderboardPage';
 import StartPage from './Start/StartPage';
 import '../styles/main.scss';
@@ -22,7 +22,7 @@ const App = props => {
         />
         <Route
           path = "/gamepage"
-          element = {<GamePage/>}
+          element = {<GamePageWrapper/>}
         />
         <Route
           path = "/leaderboardpage"
