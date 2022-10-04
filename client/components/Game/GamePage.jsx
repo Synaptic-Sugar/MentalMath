@@ -26,17 +26,23 @@ export const GamePageWrapper = props =>{
 class GamePage extends Component {
   constructor(props){
     super(props);
-    
+    console.log('username: ' + props.username);
     this.state = {
       showView: 'game',
       gameMode: props.gameMode,
       vs: props.vs,
       difficulty: props.difficulty,
-      opponent: props.opponent
+      opponent: props.opponent,
     };
     this.renderView = this.renderView.bind(this);
     this.changeView = this.changeView.bind(this);
     this.startGame = this.startGame.bind(this);
+  }
+  componentDidMount(){
+    this.setState({
+      ...this.state,
+      'endGame': ()=> this.changeView('leaderboard')
+    })
   }
 
   changeView(view){
@@ -57,11 +63,12 @@ class GamePage extends Component {
   }
 
   renderView(view){
+    console.log('username: ' + this.props.username);
     switch(view){
     case 'start':
       return <StartView startGame={ (gameMode, vs, difficulty, opponent)=> this.startGame(gameMode, vs, difficulty, opponent) } />;
     case 'game':
-      return <GameView changeView={this.changeView} gameMode={ this.state.gameMode } vs={this.state.vs} difficulty={ this.state.difficulty } opponent={ this.state.opponent }/>;
+      return <GameView username={this.props.username} changeView={(view)=> this.changeView(view)} gameMode={ this.state.gameMode } vs={this.state.vs} difficulty={ this.state.difficulty } opponent={ this.state.opponent }/>;
     case 'leaderboard':
       return (
         <Navigate id='gameNavigation' state={{username: this.props.username}} to='/leaderboardpage'/>
@@ -74,7 +81,7 @@ class GamePage extends Component {
     const view = this.renderView(this.state.showView);
     return(
       <div>
-        <GameView gameMode={ this.state.gameMode } vs={this.state.vs} difficulty={ this.state.difficulty } opponent={ this.state.opponent }/>
+        {view}
       </div>
     );
   }

@@ -1,10 +1,11 @@
 import React from "react";
 
-const ScoreRow = ({key, info}) => {
-  const {username, score} = info;
+const ScoreRow = props => {
+  console.log(props);
+  const {username, score} = props.info;
   return(
     <div>
-      <span>{key}. </span><span>{username} </span><span>{score}</span>
+      <span>{props.scoreKey}. </span><span>{username} </span><span>{score}</span>
     </div>
   )
 };

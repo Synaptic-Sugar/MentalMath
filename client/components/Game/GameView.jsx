@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import Questions from './Questions';
 import Timer from './Timer';
 import { Navigate } from 'react-router-dom';
+import cookieController from '../../../server/controllers/cookieController';
 
 class GameView extends Component {
   constructor(props){
     super(props);
-    console.log(props.gameMode);
     this.initAiTimer;
     if(props.opponent !== undefined && props.vs === 'ai'){
       this.initAiTimer = props.opponent.timeToAnswer;
@@ -29,7 +29,19 @@ class GameView extends Component {
   }
     
   gameOver(){
-    console.log('made it to gameOver');
+    // console.log( 'username:' + window );
+    // const body = { 'username': this.props.username };
+    // fetch('/leaderboardApi/addNewScore', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(body)
+    // })
+    //   .then(res => {
+    //     this.props.changeView('leaderboard');
+    //   })
+    //   .catch(err => console.log('Login fetch /login: ERROR: ', err));
     this.props.changeView('leaderboard');
     
     // Ends game

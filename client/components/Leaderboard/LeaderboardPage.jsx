@@ -1,5 +1,10 @@
 import React, { Element, Component } from 'react';
 import ScoreRow from './ScoreRow.jsx';
+import { useLocation } from 'react-router-dom'; 
+const LeaderboardPageWrapper = props =>{
+  const { state } = useLocation();
+  return <LeaderboardPage {...state}/>
+}
 
 class LeaderboardPage extends Component {
   constructor(props){
@@ -44,7 +49,7 @@ class LeaderboardPage extends Component {
       .catch(err => console.log('global best leaderboard', err));
   }
   componentDidMount() {
-    this.personalBest(username);
+    this.personalBest(this.props.username);
     this.globalBest();
   }
   
@@ -54,14 +59,14 @@ class LeaderboardPage extends Component {
   render(){
     //call to fetches
     
-    const buildPersonalBest = this.personalScores.map((score, i)=> {
+    const buildPersonalBest = this.state.personalScores.map((score, i)=> {
       return(
-        <ScoreRow key = {i} info = {score}/>
+        <ScoreRow key={i} scoreKey={i} info={score}/>
       );
     });
-    const buildGlobalBest = this.globalScores.map((score, i)=> {
+    const buildGlobalBest = this.state.globalScores.map((score, i)=> {
       return(
-        <ScoreRow key = {i} info = {score}/>
+        <ScoreRow key={i} scoreKey={i} info={score}/>
       );
     });
 
