@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Questions from './Questions';
 import Timer from './Timer';
+import { Navigate } from 'react-router-dom';
+import cookieController from '../../../server/controllers/cookieController';
 
 class GameView extends Component {
   constructor(props){
@@ -27,6 +29,21 @@ class GameView extends Component {
   }
     
   gameOver(){
+    // console.log( 'username:' + window );
+    // const body = { 'username': this.props.username };
+    // fetch('/leaderboardApi/addNewScore', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(body)
+    // })
+    //   .then(res => {
+    //     this.props.changeView('leaderboard');
+    //   })
+    //   .catch(err => console.log('Login fetch /login: ERROR: ', err));
+    this.props.changeView('leaderboard');
+    
     // Ends game
     // Sends game stats to backend
     // Renders leaderboard view
@@ -47,7 +64,7 @@ class GameView extends Component {
 
   countDown(){
 
-    if(this.state.timer <= 0 && this.props.gameMode !== '3Lives') this.gameOver();
+    if(this.state.timer <= 0) this.gameOver();
         
     if(this.props.vs !== 'ai'){
       this.setState({

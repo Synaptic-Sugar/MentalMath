@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import GameView from './GameView';
 import StartView from './StartView';
+import { Navigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'; 
 
 /* Game Modes:
     1. Timer ( question difficulty increases related to timer count down: 30s, 60s)
@@ -16,19 +18,31 @@ import StartView from './StartView';
     4. God ((score + 5) * 10)
 */
 
+export const GamePageWrapper = props =>{
+  const { state } = useLocation();
+  return <GamePage {...state}/>
+}
+
 class GamePage extends Component {
   constructor(props){
     super(props);
+    console.log('username: ' + props.username);
     this.state = {
-      showView: 'start',
-      gameMode: 'timer60',
-      vs: 'solo',
-      difficulty: 'easy',
-      opponent: undefined
+      showView: 'game',
+      gameMode: props.gameMode,
+      vs: props.vs,
+      difficulty: props.difficulty,
+      opponent: props.opponent,
     };
     this.renderView = this.renderView.bind(this);
     this.changeView = this.changeView.bind(this);
     this.startGame = this.startGame.bind(this);
+  }
+  componentDidMount(){
+    this.setState({
+      ...this.state,
+      'endGame': ()=> this.changeView('leaderboard')
+    })
   }
 
   changeView(view){
@@ -49,14 +63,15 @@ class GamePage extends Component {
   }
 
   renderView(view){
+    console.log('username: ' + this.props.username);
     switch(view){
     case 'start':
       return <StartView startGame={ (gameMode, vs, difficulty, opponent)=> this.startGame(gameMode, vs, difficulty, opponent) } />;
     case 'game':
-      return <GameView gameMode={ this.state.gameMode } vs={this.state.vs} difficulty={ this.state.difficulty } opponent={ this.state.opponent }/>;
+      return <GameView username={this.props.username} changeView={(view)=> this.changeView(view)} gameMode={ this.state.gameMode } vs={this.state.vs} difficulty={ this.state.difficulty } opponent={ this.state.opponent }/>;
     case 'leaderboard':
       return (
-        <div>GameOver</div>
+        <Navigate id='gameNavigation' state={{username: this.props.username}} to='/leaderboardpage'/>
       );
     default:
       break;
@@ -66,7 +81,7 @@ class GamePage extends Component {
     const view = this.renderView(this.state.showView);
     return(
       <div>
-        <GameView gameMode={ this.state.gameMode } vs={this.state.vs} difficulty={ this.state.difficulty } opponent={ this.state.opponent }/>
+        {view}
       </div>
     );
   }

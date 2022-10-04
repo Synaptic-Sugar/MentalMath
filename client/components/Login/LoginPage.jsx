@@ -9,7 +9,8 @@ class LoginPage extends Component {
     super(props);
     this.state = {
       isValidUser: false,
-      showView: 'login'
+      showView: 'login',
+      username: undefined,
     };
     this.goToGit = this.goToGit.bind(this);
     this.validateUser = this.validateUser.bind(this);

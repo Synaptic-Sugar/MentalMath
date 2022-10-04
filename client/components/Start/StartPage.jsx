@@ -38,7 +38,7 @@ const StartPage = props =>{
   const startGame = useNavigate();
   return (
     <div id='startView'>
-      <button id='start' onClick={ ()=> startGame('/gamepage', {gameMode: gameMode}, {vs: vs}, {difficulty: difficulty}, {opponent: opponent} ) }>Start</button>
+      <button id='start' onClick={ ()=> startGame('/gamepage', { state: {gameMode: gameMode, vs: vs, difficulty: difficulty, opponent: opponent, username: props.username}} ) }>Start</button>
       <button id='leaderboard' onClick={ ()=> props.renderGameView('leaderboard') }>Leaderboards</button>
       <div id='gameMode'>Game Mode:
         <button className='btnGameMode'  style={ gameModeStyle('timer60') } onClick={ ()=> setGameMode('timer60') }>60 Second Sprint</button>
