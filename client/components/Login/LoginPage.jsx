@@ -67,6 +67,10 @@ class LoginPage extends Component {
 
   goToGit(){
     fetch('/userApi/auth')
+      .then(res =>{
+        var wind = window.open('', 'popupWindow', 'width=600,height=600,scrollbars=yes');
+        wind.document.write(res);
+      })
       .catch(err => console.log('Login fetch /login: ERROR: ', err));
   }
 
@@ -79,15 +83,15 @@ class LoginPage extends Component {
   renderView(view){
     switch(view){
     case 'login':
-      return <LoginView validateUser={this.validateUser} username={this.state.username} showView={this.showView} isValidUser={this.state.isValidUser} goToGit={this.goToGit}/>
+      return <LoginView validateUser={this.validateUser} username={this.state.username} showView={this.showView} isValidUser={this.state.isValidUser} goToGit={this.goToGit}/>;
     case 'signup':
-      return <SignUpView signUpUser={this.signUpUser} username={this.state.username} showView={this.showView} isValidUser={this.state.isValidUser} goToGit={this.goToGit}/>
+      return <SignUpView signUpUser={this.signUpUser} username={this.state.username} showView={this.showView} isValidUser={this.state.isValidUser} goToGit={this.goToGit}/>;
     default:
       break;
     }
   }
   render(){
-    const view = this.renderView(this.state.showView)
+    const view = this.renderView(this.state.showView);
     return(
       <div>
         {view}

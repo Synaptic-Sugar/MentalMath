@@ -84,6 +84,24 @@ userController.getAllUsers = (req, res, next) => {
     });
 };
 
+userController.getOneUser = (req, res, next) => {
+  const username = req.params.username;
+  console.log('user to logout: ', username);
+  const getOneQuery = 'SELECT * FROM UsersTable WHERE username = $1';
+  db.query(getOneQuery, [ username ])
+    .then((docs) => {
+      console.log('username from docs; ', docs.rows[0].username);
+      res.locals.username = docs.rows[0].username;
+      return next(); 
+    })
+    . catch(err => {
+      return next({
+        log: `userController.getOneUser: ERROR: ${err}`,
+        message: { err: 'Error in userController.getOneUser. Check logs for details.' }
+      });
+    });
+};
+
 // Here we process oauth-callback 
 userController.getAccessToken = async (req, res, next) => {
   let body;
@@ -112,29 +130,38 @@ userController.getAccessToken = async (req, res, next) => {
   }
   catch(err){
     return next({
-      log: `oauth-callback error: ERROR: ${err} `,
+      log: `userController.getAccessToken error: ERROR: ${err} `,
       message: {error: 'Error found in userController.getAccessToken. See logs for more details'}
     });
   }
 };
 
-userController.getOneUser = (req, res, next) => {
-  const username = req.params.username;
-  console.log('user to logout: ', username);
-  const getOneQuery = 'SELECT * FROM UsersTable WHERE username = $1';
-  db.query(getOneQuery, [ username ])
-    .then((docs) => {
-      console.log('username from docs; ', docs.rows[0].username);
-      res.locals.username = docs.rows[0].username;
-      return next(); 
-    })
-    . catch(err => {
-      return next({
-        log: `userController.getOneUser: ERROR: ${err}`,
-        message: { err: 'Error in userController.getOneUser. Check logs for details.' }
-      });
+// for oauth to get username from the token
+userController.getUserData = async (req, res, next) => {
+  const token = res.locals.token;
+  try{
+    const response = await fetch('https://api.github.com/user', {
+      method: 'GET',
+      headers: { Authorization: 'token' + token }
     });
+    res.locals.userData = await response.data;
+    return next();
+  }
+  catch(err){
+    return next({
+      log: `userController.getUserData error: ERROR: ${err} `,
+      message: {error: 'Error found in userController.getUserData. See logs for more details'}
+    });
+  }
 };
+
+// for oauth protcol to check for user, if not present create user, otherwise login user (must return res.locals.username)
+userController.createOrFindUser = (req, res, next) => {
+  const { username } = res.userData;
+  
+};
+
+
 
 // userController.updateUsername = (req, res, next) => {
 //   const id = req.params.id;

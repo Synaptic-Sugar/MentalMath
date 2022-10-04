@@ -59,6 +59,7 @@ router.get('/auth', (req, res) => {
 // to navigate to github to login with OAuth
 router.get('/oauth-callback',
   userController.getAccessToken,
+  userController.getUserData,
   // userController.createOrFindUser,// need to build this
   // sessionController.startSessionAuth,
   // cookieController.setSSIDCookieAuth,
